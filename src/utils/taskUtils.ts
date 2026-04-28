@@ -1,4 +1,4 @@
-import type { Task } from '../types/index.ts';
+import type { Task, FilterOptions } from '../types/index.ts';
 
 const STORAGE_KEY = 'dashboard_tasks';
 
@@ -25,4 +25,25 @@ export const getTaskStats = (tasks: Task[]) => {
     },
     { total: 0, completed: 0, inProgress: 0, todo: 0 }
   );
+};
+
+export const filterAndSortTasks = (tasks: Task[], filters: FilterOptions): Task[] => {
+  return tasks
+    .filter((task) => {
+      // Status Filter
+      const matchesStatus = filters.status === 'all' || task.status === filters.status;
+      
+      // Priority Filter
+      const matchesPriority = filters.priority === 'all' || task.priority === filters.priority;
+      
+      // Search Filter (checks both title and description)
+      const searchTerm = filters.searchQuery.toLowerCase();
+      const matchesSearch = 
+        task.title.toLowerCase().includes(searchTerm) || 
+        task.description.toLowerCase().includes(searchTerm);
+
+      return matchesStatus && matchesPriority && matchesSearch;
+    })
+    // Sort by Date (Newest first)
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 };
