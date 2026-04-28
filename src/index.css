@@ -1,3 +1,14 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+@layer base {
+  body {
+    @apply antialiased text-gray-900 bg-gray-50 transition-colors duration-300;
+  }
+  
+  /* Apply dark mode base styles */
+  .dark body {
+    @apply text-white bg-gray-900;
+  }
+}
